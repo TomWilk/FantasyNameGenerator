@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FantasyNameGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "--train\r\n"
+    }
+  }
+}
