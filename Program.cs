@@ -4,34 +4,26 @@
     {
         static void Main(string[] args)
         {
-            try
+            if (args.Length == 0)
             {
-                if (args.Length == 0)
+                _ = new NameGenerator();
+            } else if (args.Length == 1) 
+            {
+                if (args[0].ToLower() == "--generate")
                 {
                     _ = new NameGenerator();
-                }
-                else if (args.Length == 1)
+                } else if (args[0].ToLower() == "--train")
                 {
-                    switch (args[0].ToLower())
-                    {
-                        case "--generate":
-                            _ = new NameGenerator();
-                            break;
-                        case "--train":
-                            _ = new MarkovTrain();
-                            break;
-                        default:
-                            throw new Exception("Error: Invalid argument. Use --train or --generate.");
-                    };
+                    _ = new MarkovTrain();
                 }
                 else
                 {
-                    throw new Exception("Error: Invalid number of argument.");
+                    Console.Error.WriteLine("Error. Błędne użycie");
                 }
             }
-            catch(Exception ex)
+            else
             {
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine("Error. Błędne użycie");
             }
         }
     }
