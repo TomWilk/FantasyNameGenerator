@@ -10,9 +10,9 @@ namespace FantasyNameGenerator
     internal class NameGenerator
     {
         const string trainedFile = "trainedData.json";
-        const char startingCharacter = '^',
-                   endingCharacter = '$';
-        Dictionary<char, Dictionary<char, int>> markov;
+        const string startingCharacter = "^^";
+        const char endingCharacter = '$';
+        Dictionary<string, Dictionary<char, int>> markov;
         public NameGenerator()
         {
             if (!File.Exists(trainedFile))
@@ -21,7 +21,7 @@ namespace FantasyNameGenerator
                                                 "Run this program with --train parameter first!");
             }
             string jsonFile = File.ReadAllText(trainedFile);
-            markov = JsonSerializer.Deserialize<Dictionary<char, Dictionary<char, int>>>(jsonFile)
+            markov = JsonSerializer.Deserialize<Dictionary<string, Dictionary<char, int>>>(jsonFile)
                         ?? throw new Exception("Something went wrong with getting values from trained data!\n" +
                                                "Check if you trained data correctly!");
 
@@ -35,7 +35,8 @@ namespace FantasyNameGenerator
         {
             string name = "";
             char character = '\0';
-            var options = markov[startingCharacter];
+            string nextKey = startingCharacter;
+            var options = markov[nextKey];
             int total, choice, cumulative;
             Random rand = new Random();
             while (true)
@@ -69,7 +70,15 @@ namespace FantasyNameGenerator
                 {
                     name += character;
                 }
-                options = markov[character];
+                nextKey = nextKey[1].ToString() + character.ToString();
+                if (markov.ContainsKey(nextKey))
+                {
+                    options = markov[nextKey];
+                }
+                else
+                {
+                    options = markov[character.ToString()];
+                }
             }
 
             return name;

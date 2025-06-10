@@ -1,8 +1,7 @@
 {
   "profiles": {
     "FantasyNameGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": "\r\n"
+      "commandName": "Project"
     }
   }
 }
