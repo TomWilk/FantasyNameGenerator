@@ -13,7 +13,7 @@ namespace FantasyNameGenerator
         string path = "namesRaw.txt",
                trainedFile = "trainedData.json";
 
-        Dictionary<char, Dictionary<char, int>> markov = new Dictionary<char, Dictionary<char, int>>();
+        Dictionary<string, Dictionary<char, int>> markov = new Dictionary<string, Dictionary<char, int>>();
         public MarkovTrain()
         {
             if(!File.Exists(path)) 
@@ -25,16 +25,18 @@ namespace FantasyNameGenerator
                 var lines = File.ReadLines(path);
                 foreach(var line in lines)
                 {
-                    string name = "^" + line.ToString().Trim().ToLower() + "$";
-                    for(int i = 0, length = name.Length - 1; i < length; i++)
+                    string name = "^^" + line.ToString().Trim().ToLower() + "$";
+                    for(int i = 0, length = name.Length - 2; i < length; i++)
                     {
-                        char current = name[i];
-                        char next = name[i + 1];
+                        string current = name[i].ToString() + name[i + 1].ToString();
+                        char next = name[i + 2];
 
                         if (!markov.ContainsKey(current))
                         {
                             markov[current] = new Dictionary<char, int>();
                         }
+
+
                         if (!markov[current].ContainsKey(next))
                         {
                             markov[current][next] = 1;
@@ -43,7 +45,22 @@ namespace FantasyNameGenerator
                         {
                             markov[current][next]++;
                         }
-                        
+
+                        if (current[1] != '^')
+                        {
+                            if (!markov.ContainsKey(current[1].ToString()))
+                            {
+                                markov[current[1].ToString()] = new Dictionary<char, int>();
+                            }
+                            if (!markov[current[1].ToString()].ContainsKey(next))
+                            {
+                                markov[current[1].ToString()][next] = 1;
+                            }
+                            else
+                            {
+                                markov[current[1].ToString()][next]++;
+                            }
+                        }
                     }
                 }
 
